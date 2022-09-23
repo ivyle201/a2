@@ -1,0 +1,246 @@
+[vivian@sjsu ~]$ 
+[vivian@sjsu ~]$ 
+[vivian@sjsu ~]$ Script started on 2022-09-22 21:19:52-04:00
+[vivian@sjsu ~]$ 
+[vivian@sjsu ~]$ mkdir A2
+[vivian@sjsu ~]$
+[vivian@sjsu ~]$ cd A2
+[vivian@sjsu A2]$
+
+
+
+0) The twitter files have tweet text broken over many lines due to "\n" newlines (also called linefeeds or lfs) the user pressed (check it out with vi). Describe why MS-excel doesn't get confused by the newlines and displays the tweet text in a single row. 
+
+Answer: If a field value starts with a ", then it knows to look for the end " for the value of the field. Even when the text includes a new line.
+
+
+Describe in a few sentences how you would remove the newlines from the text field (the professor already did this for you, so you should actually use downloaded_tweets_extend_nolf.csv and downloaded_tweets_extend_original_nolf.csv).
+
+Answer: First, I import the file into google sheet, then I created a new column "J" and I added the formula =SUBSTITUE(E2,CHAR(10)," "). After that I deleted column E (Text) and format the column to align center.
+
+
+
+1) Find the top 10 users who replied the most to other users. (***There are two answers; One include users replied TO themselves and one is without.***)
+
+[vivian@sjsu A2]$ cut -f2,6 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
+
+    106 380648579
+    104 18831926
+     83 16050065
+     46 117810351
+     45 1240682348120866816
+     35 1094971056358637568
+     34 140496030
+     34 1387010761994682371
+     32 172323296
+     19 1573800344
+
+[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | awk -F "\t" '($1 != $3) {print $1}' | sort | uniq -c | sort -nr | head -n 10
+
+     28 1387010761994682371
+     19 1573800344
+     17 1921951394
+     16 1240682348120866816
+     14 94350709
+     14 940778288871542786
+     11 90107770
+     11 29447428
+     10 1401861298233647106
+      9 4830874006
+
+
+
+2) Find the top 10 users who got the most replies from other users. (***There are two answers; One include users replied FROM themselves and one is without.***)
+
+[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | cut -f3 | sort | uniq -c | sort -nr | head -n 10
+
+    112 18831926
+    107 380648579
+     83 16050065
+     48 117810351
+     45 3453306553
+     37 1094971056358637568
+     34 140496030
+     32 172323296
+     30 29447428
+     30 1240682348120866816
+
+[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | awk -F "\t" '($3 != $1) {print $3}' | sort | uniq -c | sort -nr | head -n 10
+
+     45 3453306553
+     27 29447428
+     14 1238370241169616897
+     13 1108565574
+     12 19739126
+     11 21525682
+     10 95091601
+     10 48624704
+     10 1462548977367359490
+      9 26217297
+
+
+
+3) Find the top 10 users who retweeted the most other tweets.
+
+[vivian@sjsu A2]$ cut -f2,6 downloaded_tweets_extend_formatted.tsv | grep "type=retweeted" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
+
+   2065 45379403
+   1678 77726331
+   1641 870244616003403781
+   1582 1028022611324747776
+   1312 711608180535640064
+   1281 139109800
+   1234 177400353
+   1216 832019161454817280
+   1159 29447428
+   1139 1060440219097423872
+
+
+
+5) Find the 30 hashtags used most frequently overall for anything.
+
+[vivian@sjsu A2]$ cut -f4 downloaded_tweets_extend_formatted.tsv | tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+   2823 Ukraine
+   1609 COVID19
+   1115 Russia
+   1110 LongCovid
+    895 FBPE
+    894 FollowBackFriday
+    782 StandWithUkraine
+    536 PutinHitler
+    476 Russian
+    406 Putin
+    405 Omicron
+    366 BREAKING
+    363 auspol
+    357 Mariupol
+    343 bcpoli
+    337 Kyiv
+    319 ableg
+    305 StopPutinNOW
+    292 COVIDisAirborne
+    282 PMQs
+    280 เจ้าแก้มก้อน
+    274 PutinWarCriminal
+    269 Ottawa
+    263 RussiaSanctions
+    263 Genocide
+    260 BoycottRussia
+    258 Ukrainian
+    252 VoteFordOut
+    239 onpoli
+    239 cdnpoli
+
+
+6) Find the 30 hashtags that got retweeted the most
+
+[vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=retweeted"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+   2510 Ukraine
+   1096 COVID19
+   1029 Russia
+    956 LongCovid
+    397 Russian
+    362 BREAKING
+    348 auspol
+    317 Kyiv
+    316 Omicron
+    287 Mariupol
+    274 เจ้าแก้มก้อน
+    240 StandWithUkraine
+    228 Putin
+    222 BA2
+    218 Ukrainian
+    199 fluke_natouch
+    178 PMQs
+    169 COVID
+    146 Covid19
+    138 ableg
+    128 Kharkiv
+    121 โอห์มไง
+    116 Anonymous
+    114 UkraineRussiaWar
+    114 NATO
+    113 UK
+    111 China
+    105 Partygate
+    104 OhmThitiwat
+    104 longcovid
+
+7) Find the 30 hashtags that got replied the most
+
+[vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=replied_to"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+    883 FBPE
+    875 FollowBackFriday
+    429 PutinHitler
+    319 StandWithUkraine
+    263 COVID19
+    216 StopPutinNOW
+    211 RussiaSanctions
+    207 BoycottRussia
+    191 PutinWarCriminal
+    181 bcpoli
+    149 Ottawa
+    130 bced
+    122 COVID19BC
+    115 Genocide
+    108 NeverVoteConservative
+    106 BoycottATP
+    100 onpoli
+     98 LongCovid
+     92 VoteFordOut
+     92 COVIDisAirborne
+     91 Ukraine
+     84 ClimateCrisis
+     77 Putin
+     72 Canada
+     65 cdnpoli
+     65 Apartheid
+     64 UkraineInvasion
+     62 N95
+     60 Ontario
+     58 MaskUp
+
+8) Find the 30 hashtags that got quoted the most
+
+[vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=quoted"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+    186 COVID19
+    151 StandWithUkraine
+    140 VoteFordOut
+    113 Genocide
+    111 ableg
+    104 onpoli
+    100 NeverVoteConservative
+     93 bcpoli
+     76 Ukraine
+     76 MaskMandate
+     76 COVIDisAirborne
+     72 Ontario
+     64 Putin
+     64 COVID19AB
+     64 BDS
+     61 MaskUp
+     60 PutinHitler
+     59 COVID19BC
+     59 cdnpoli
+     57 Ottawa
+     56 Canada
+     54 bced
+     53 CovidIsNotOver
+     49 LongCovid
+     49 covid19
+     47 PutinWarCriminal
+     47 FreePalestine
+     46 VoteThemAllOut2022
+     44 StopPutinNOW
+     43 VoteLiberal
+
+[vivian@sjsu A2]$ exit
+
+Script done on 2022-09-22 21:45:43-04:00
+
+
+
