@@ -16,13 +16,35 @@ Answer: If a field value starts with a ", then it knows to look for the end " fo
 
 Describe in a few sentences how you would remove the newlines from the text field (the professor already did this for you, so you should actually use downloaded_tweets_extend_nolf.csv and downloaded_tweets_extend_original_nolf.csv).
 
-Answer: First, I import the file into google sheet, then I created a new column "J" and I added the formula =SUBSTITUE(E2,CHAR(10)," "). After that I deleted column E (Text) and format the column to align center.
+
+
+VIVIAN: First, I import the file into google sheet, then I created a new column "J" and I added the formula =SUBSTITUE(E2,CHAR(10)," "). After that I deleted column E (Text) and format the column to align center.
 
 
 
-1) Find the top 10 users who replied the most to other users. (***There are two answers; One include users replied TO themselves and one is without.***)
 
-[vivian@sjsu A2]$ cut -f2,6 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
+
+1) Find the top 10 users who replied the most to other users. (******There are two answers; One include users replied TO themselves and one is without.*****)
+
+
+
+[vivian@sjsu A2]$ cut -f2,5 downloaded_tweets_extend_original_nolf2_NOBOT.tsv | grep "replied_to" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
+
+***********(NO BOTS)************
+
+     28 1387010761994682371
+     19 1573800344
+     17 1921951394
+     16 1240682348120866816
+     14 94350709
+     14 940778288871542786
+     11 29447428
+     10 90107770
+     10 1401861298233647106
+      9 4830874006
+
+***********(WITH BOTS)************
+[vivian@sjsu A2]$ cut -f2,5 downloaded_tweets_extend_original_nolf2.tsv | grep "replied_to" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
 
     106 380648579
     104 18831926
@@ -35,37 +57,15 @@ Answer: First, I import the file into google sheet, then I created a new column 
      32 172323296
      19 1573800344
 
-[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | awk -F "\t" '($1 != $3) {print $1}' | sort | uniq -c | sort -nr | head -n 10
-
-     28 1387010761994682371
-     19 1573800344
-     17 1921951394
-     16 1240682348120866816
-     14 94350709
-     14 940778288871542786
-     11 90107770
-     11 29447428
-     10 1401861298233647106
-      9 4830874006
 
 
 
-2) Find the top 10 users who got the most replies from other users. (***There are two answers; One include users replied FROM themselves and one is without.***)
+2) Find the top 10 users who got the most replies from other users. (******There are two answers; One include users replied TO themselves and one is without.*****)
 
-[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | cut -f3 | sort | uniq -c | sort -nr | head -n 10
 
-    112 18831926
-    107 380648579
-     83 16050065
-     48 117810351
-     45 3453306553
-     37 1094971056358637568
-     34 140496030
-     32 172323296
-     30 29447428
-     30 1240682348120866816
+***********(NO BOTS)************
 
-[vivian@sjsu A2]$ cut -f2,6,7 downloaded_tweets_extend_original_formatted.tsv | grep "replied_to" | awk -F "\t" '($3 != $1) {print $3}' | sort | uniq -c | sort -nr | head -n 10
+[vivian@sjsu A2]$ cut -f5,6 downloaded_tweets_extend_original_nolf2_NOBOT.tsv | grep "replied_to" | cut -f 2 | sort | uniq -c | sort -nr | head -n 10
 
      45 3453306553
      27 29447428
@@ -79,10 +79,30 @@ Answer: First, I import the file into google sheet, then I created a new column 
       9 26217297
 
 
+***********(WITH BOTS)************
+
+[vivian@sjsu ~]$ cut -f5,6 downloaded_tweets_extend_original_nolf2.tsv | grep "replied_to" | cut -f 2 | sort | uniq -c | sort -nr | head -n 10
+
+    112 18831926
+    107 380648579
+     83 16050065
+     45 3453306553
+     37 1094971056358637568
+     34 140496030
+     32 172323296
+     30 29447428
+     30 1240682348120866816
+     29 117810351
+
+
+
 
 3) Find the top 10 users who retweeted the most other tweets.
 
-[vivian@sjsu A2]$ cut -f2,6 downloaded_tweets_extend_formatted.tsv | grep "type=retweeted" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
+
+***********(NO BOTS)************
+
+[vivian@sjsu A2]$ cut -f2,5 downloaded_tweets_extend_nolf2_NOBOT.tsv | grep "type=retweeted" | cut -f1 | sort | uniq -c | sort -nr | head -n 10
 
    2065 45379403
    1678 77726331
@@ -97,7 +117,47 @@ Answer: First, I import the file into google sheet, then I created a new column 
 
 
 
+
+
 5) Find the 30 hashtags used most frequently overall for anything.
+
+***********(NO BOTS)************
+
+[vivian@sjsu ~]$ cut -f4 downloaded_tweets_extend_nolf2_NOBOT.tsv | tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+   1545 Ukraine
+   1084 COVID19
+    905 LongCovid
+    887 "FBPE
+    859 FollowBackFriday"
+    658 Ukraine"
+    608 "Ukraine
+    502 StandWithUkraine
+    492 Russia
+    347 "Russia
+    328 "COVID19
+    308 BREAKING
+    276 PutinHitler
+    273 Russia"
+    261 PMQs
+    259 StopPutinNOW
+    255 RussiaSanctions
+    248 Omicron
+    238 PutinWarCriminal
+    235 auspol
+    229 "PutinHitler
+    213 Putin
+    198 COVIDisAirborne
+    192 Mariupol
+    186 COVID19"
+    177 AmiesMovieRating
+    174 BoycottRussia"
+    167 Kyiv
+    164 "Russian
+    164 bcpoli
+
+
+****(with bot)****
 
 [vivian@sjsu A2]$ cut -f4 downloaded_tweets_extend_formatted.tsv | tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
 
@@ -133,7 +193,49 @@ Answer: First, I import the file into google sheet, then I created a new column 
     239 cdnpoli
 
 
+
+
+
 6) Find the 30 hashtags that got retweeted the most
+
+***********(NO BOTS)************
+
+[vivian@sjsu ~]$ cut -f4,5 downloaded_tweets_extend_nolf2_NOBOT.tsv | grep "type=retweeted"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+   1390 Ukraine
+    824 COVID19
+    821 LongCovid
+    600 Ukraine"
+    520 "Ukraine
+    449 Russia
+    320 "Russia
+    306 BREAKING
+    260 Russia"
+    223 auspol
+    183 Omicron
+    180 Mariupol
+    170 PMQs
+    164 StandWithUkraine
+    160 Kyiv
+    143 "เจ้าแก้มก้อน
+    141 "COVID19
+    136 "Russian
+    134 Russian"
+    134 BA2
+    131 COVID19"
+    127 Russian
+    123 COVID
+    103 Covid19
+     99 Putin
+     92 Kyiv"
+     91 เจ้าแก้มก้อน
+     86 Partygate
+     86 fluke_natouch"
+     86 ENGLAND"
+
+
+
+****(with bot)****
 
 [vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=retweeted"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
 
@@ -168,7 +270,52 @@ Answer: First, I import the file into google sheet, then I created a new column 
     104 OhmThitiwat
     104 longcovid
 
+
+
+
+
+
 7) Find the 30 hashtags that got replied the most
+
+
+***********(NO BOTS)************
+
+[vivian@sjsu ~]$ cut -f4,5 downloaded_tweets_extend_nolf2_NOBOT.tsv | grep "type=replied_to" | cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+    882 "FBPE
+    854 FollowBackFriday"
+    235 StandWithUkraine
+    217 "PutinHitler
+    204 RussiaSanctions
+    202 PutinHitler
+    201 StopPutinNOW
+    179 PutinWarCriminal
+    153 BoycottRussia"
+    133 COVID19
+    106 BoycottATP
+    100 "COVID19
+     78 bcpoli
+     76 Ottawa
+     74 NeverVoteConservative
+     73 ClimateCrisis
+     72 bcpoli"
+     71 bced"
+     69 Genocide
+     66 onpoli"
+     58 LongCovid
+     58 COVIDisAirborne
+     54 "Ottawa
+     54 BoycottRussia
+     53 COVID19BC
+     49 Putin
+     49 J6TraitorSaysWhat"
+     49 "J6T
+     48 StandWithUkraine"
+     46 VoteFordOut
+
+
+
+****(with bot)****
 
 [vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=replied_to"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
 
@@ -203,7 +350,52 @@ Answer: First, I import the file into google sheet, then I created a new column 
      60 Ontario
      58 MaskUp
 
+
+
+
+
+
 8) Find the 30 hashtags that got quoted the most
+
+
+***********(NO BOTS)************
+
+[vivian@sjsu ~]$ cut -f4,5 downloaded_tweets_extend_nolf2_NOBOT.tsv | grep "type=quoted" | cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
+
+     90 COVID19
+     75 onpoli"
+     73 NeverVoteConservative
+     69 "COVID19
+     65 "ableg
+     63 VoteFordOut
+     63 StandWithUkraine
+     56 "StandWithUkraine
+     56 Genocide
+     54 Ontario
+     47 Putin
+     47 COVIDisAirborne
+     46 PutinHitler
+     43 VoteThemAllOut2022
+     43 VoteFordOut"
+     42 RussiaSanctions
+     41 Ukraine
+     41 MaskUp
+     41 bcpoli
+     39 PutinWarCriminal
+     39 MaskMandate
+     39 Gaza
+     39 COVID19BC
+     38 StopPutinNOW
+     36 Idlib
+     34 "VoteFordOut
+     34 CovidIsNotOver
+     33 VoteFordOut2022
+     32 StandWithUkraine"
+     32 Ottawa
+
+
+
+****(with bot)****
 
 [vivian@sjsu A2]$ cut -f4,6 downloaded_tweets_extend_formatted.tsv | grep "type=quoted"| cut -f1| tr ',' '\n' | grep . | sort | uniq -c | sort -nr | head -n 30
 
@@ -237,6 +429,8 @@ Answer: First, I import the file into google sheet, then I created a new column 
      46 VoteThemAllOut2022
      44 StopPutinNOW
      43 VoteLiberal
+
+
 
 [vivian@sjsu A2]$ exit
 
